@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            padding: 10px;
+            margin-top: 5px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Get Your Movie Recommendation and Roast</h1>
+
+    <!-- Form for User Input -->
+    <form id="movieForm">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+
+        <label for="mood">Current Mood:</label>
+        <input type="text" id="mood" name="mood" required>
+
+        <label for="relationship_status">Relationship Status:</label>
+        <select id="relationship_status" name="relationship_status" required>
+            <option value="single">Single</option>
+            <option value="in a relationship">In a relationship</option>
+            <option value="married">Married</option>
+        </select>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select>
+
+        <br><br>
+        <button type="submit">Get Recommendation</button>
+    </form>
+
+    <!-- Div to Display Results -->
+    <div id="result">
+        <h2>Result:</h2>
+        <p id="recommendation"></p>
+        <p id="explanation"></p>
+        <p id="roast"></p>
+    </div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('movieForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent form from refreshing the page
+
+            // Get form values
+            const age = document.getElementById('age').value;
+            const mood = document.getElementById('mood').value;
+            const relationship_status = document.getElementById('relationship_status').value;
+            const gender = document.getElementById('gender').value;
+
+            // Send the form data to the Flask API using fetch
+            const response = await fetch('http://127.0.0.1:5000/recommend-movie', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    age: age,
+                    mood: mood,
+                    relationship_status: relationship_status,
+                    gender: gender
+                })
+            });
+
+            // Parse the JSON response
+            const data = await response.json();
+
+            // Display the recommendation, explanation, and roast in the result section
+            document.getElementById('recommendation').textContent = 'Recommendation: ' + data.recommendation;
+            document.getElementById('explanation').textContent = 'Explanation: ' + data.explanation;
+            document.getElementById('roast').textContent = 'Roast: ' + data.roast;
+        });
+    </script>
+
+</body>
+</html>

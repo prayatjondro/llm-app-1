@@ -1,7 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from llm_recommender import get_movie_recommendation
 
 app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('frontend.html')  # Serve the front-end
 
 @app.route('/recommend-movie', methods=['POST'])
 def recommend_movie():
