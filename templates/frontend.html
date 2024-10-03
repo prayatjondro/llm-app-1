@@ -3,61 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Recommendation App</title>
+    <title>Personalized Movie Recommendation</title>
     <style>
+        /* General page and body styling */
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f7f7f7; /* Light background */
+            color: #333; /* Darker text for better readability */
         }
+
+        /* Container styling */
+        .container {
+            text-align: left;
+            background-color: white; /* White background for the container */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            max-width: 400px; /* Thinner form width */
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        /* Label and input field styling */
         label {
-            display: block;
-            margin-top: 10px;
+            margin-bottom: 5px; /* Small gap between label and input */
+            font-size: 14px;
+            color: #666; /* Muted label color */
         }
-        input, select, button {
+
+        input {
+            margin: 0 0 15px 0; /* Gap between input fields */
+            width: 100%;
             padding: 10px;
-            margin-top: 5px;
+            font-size: 16px;
+            border: 1px solid #ddd; /* Light border */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #fafafa; /* Light background for inputs */
+            box-sizing: border-box;
         }
-        #result {
-            margin-top: 20px;
+
+        input:focus {
+            outline: none;
+            border-color: #007bff; /* Blue border when focused */
+        }
+
+        /* Button styling */
+        button {
+            cursor: pointer;
+            background-color: #007bff; /* Soft blue background */
+            color: white;
+            border: none;
+            border-radius: 20px; /* Rounded borders */
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* Close button for the modal */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .bold-text {
+            font-weight: bold;
+            color: #333; /* Darker text for emphasis */
+        }
+
+        /* Heading styling */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Get Your Movie Recommendation and Roast</h1>
+    <div class="container">
+        <h1>Personalized Movie Recommendation</h1>
 
-    <!-- Form for User Input -->
-    <form id="movieForm">
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age" required>
+        <!-- Form for User Input -->
+        <form id="movieForm">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" required>
 
-        <label for="mood">Current Mood:</label>
-        <input type="text" id="mood" name="mood" required>
+            <label for="mood">Current Mood</label>
+            <input type="text" id="mood" name="mood" required>
 
-        <label for="relationship_status">Relationship Status:</label>
-        <select id="relationship_status" name="relationship_status" required>
-            <option value="single">Single</option>
-            <option value="in a relationship">In a relationship</option>
-            <option value="married">Married</option>
-        </select>
+            <label for="relationship_status">Relationship Status</label>
+            <input type="text" id="relationship_status" name="relationship_status" required>
 
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender" required>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-        </select>
+            <label for="gender">Gender</label>
+            <input type="text" id="gender" name="gender" required>
 
-        <br><br>
-        <button type="submit">Get Recommendation</button>
-    </form>
+            <br><br>
+            <button type="submit">Get Recommendation</button>
+        </form>
+    </div>
 
-    <!-- Div to Display Results -->
-    <div id="result">
-        <h2>Result:</h2>
-        <p id="recommendation"></p>
-        <p id="explanation"></p>
-        <p id="roast"></p>
+    <!-- Modal for displaying the results -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Result</h2>
+            <p><span class="bold-text">Recommendation:</span> <span id="recommendation"></span></p>
+            <p><span class="bold-text">Explanation:</span> <span id="explanation"></span></p>
+            <button id="generateRoastBtn">Generate Roast</button>
+            
+            <!-- Roast section initially hidden -->
+            <div id="roastSection" style="display: none;">
+                <p><span class="bold-text">Roast:</span> <span id="roast"></span></p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -88,11 +189,35 @@
             // Parse the JSON response
             const data = await response.json();
 
-            // Display the recommendation, explanation, and roast in the result section
-            document.getElementById('recommendation').textContent = 'Recommendation: ' + data.recommendation;
-            document.getElementById('explanation').textContent = 'Explanation: ' + data.explanation;
-            document.getElementById('roast').textContent = 'Roast: ' + data.roast;
+            // Display the recommendation and explanation in the modal
+            document.getElementById('recommendation').textContent = data.recommendation;
+            document.getElementById('explanation').textContent = data.explanation;
+
+            // Show the modal
+            const modal = document.getElementById('resultModal');
+            modal.style.display = 'flex'; // Show the modal as flexbox
+
+            // Handle "Generate Roast" button click
+            const roast = data.roast;
+            document.getElementById('generateRoastBtn').addEventListener('click', function() {
+                document.getElementById('roast').textContent = roast;
+                document.getElementById('roastSection').style.display = 'block'; // Show the roast section
+                this.style.display = 'none'; // Hide the button after it's clicked
+            });
         });
+
+        // Handle modal close button
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('resultModal').style.display = 'none';
+        });
+
+        // Close modal if user clicks outside the modal content
+        window.onclick = function(event) {
+            const modal = document.getElementById('resultModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
     </script>
 
 </body>
