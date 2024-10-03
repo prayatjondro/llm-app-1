@@ -17,10 +17,11 @@ def recommend_movie():
     if not all([mood, gender, relationship_status, age]):
         return jsonify({"error": "Missing one or more input fields"}), 400
 
-    # Get movie recommendation
-    recommendation = get_movie_recommendation(mood, gender, relationship_status, age)
+    # Get movie recommendation and roast
+    result = get_movie_recommendation(mood, gender, relationship_status, age)
     
-    return jsonify({"recommendation": recommendation})
+    # Return both the recommendation and roast as JSON
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(debug=True)
