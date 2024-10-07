@@ -12,6 +12,7 @@
             padding: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background-color: #f7f7f7; /* Light background */
@@ -119,6 +120,24 @@
             font-size: 20px;
             margin-bottom: 10px;
         }
+
+        /* Loader styling */
+        #loader {
+            display: none;
+            font-size: 16px;
+            color: #007bff;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Footer with credit */
+        .footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -142,6 +161,9 @@
 
             <br><br>
             <button type="submit">Get Recommendation</button>
+
+            <!-- Loader message -->
+            <div id="loader">Please wait...</div>
         </form>
     </div>
 
@@ -161,10 +183,18 @@
         </div>
     </div>
 
+    <!-- Footer with your name -->
+    <div class="footer">
+        Abhipraya Tjondronegoro
+    </div>
+
     <script>
         // Handle form submission
         document.getElementById('movieForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Prevent form from refreshing the page
+
+            // Show the loader message
+            document.getElementById('loader').style.display = 'block';
 
             // Get form values
             const age = document.getElementById('age').value;
@@ -188,6 +218,9 @@
 
             // Parse the JSON response
             const data = await response.json();
+
+            // Hide the loader message
+            document.getElementById('loader').style.display = 'none';
 
             // Display the recommendation and explanation in the modal
             document.getElementById('recommendation').textContent = data.recommendation;
