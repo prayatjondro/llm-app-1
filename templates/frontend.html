@@ -193,6 +193,10 @@
         document.getElementById('movieForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Prevent form from refreshing the page
 
+            // Reset the roast section and show the generate roast button again
+            document.getElementById('roastSection').style.display = 'none';  // Hide the roast section
+            document.getElementById('generateRoastBtn').style.display = 'block'; // Show the generate roast button
+
             // Show the loader message
             document.getElementById('loader').style.display = 'block';
 
